@@ -1,0 +1,7 @@
+schema: "classroom50/repo-config/v1"
+classroom: "frontend-programacion-iv"
+assignment: "crear-repo"
+owner:
+  username: "lzaratem"
+  id: 323411340
+  accepted_at: "2026-09-19T01:26:06Z"
