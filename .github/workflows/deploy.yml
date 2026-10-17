@@ -14,9 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: withastro/action@v6  # Se corrigió "whitastro" por "withastro"
-        with:
-          node-version: 22
+      - uses: withastro/action@v3  # Se corrigió "whitastro" por "withastro"
+       
 
   publicar:
     needs: construir
