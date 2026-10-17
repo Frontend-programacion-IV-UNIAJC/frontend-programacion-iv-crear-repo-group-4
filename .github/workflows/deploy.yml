@@ -16,7 +16,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: withastro/action@v3
         with:
-          package-manager: npm  # <--- AQUÍ INDICAS QUE USE NPM OBLIGATORIAMENTE
+          package-manager: npm
+          node-version: 22      # <--- AGREGA ESTA LÍNEA EXACTA AQUÍ
 
   publicar:
     needs: construir
