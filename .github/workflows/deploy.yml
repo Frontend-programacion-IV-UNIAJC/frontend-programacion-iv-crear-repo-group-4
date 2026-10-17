@@ -14,8 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: withastro/action@v3  # Se corrigió "whitastro" por "withastro"
-       
+      - uses: withastro/action@v3
+        with:
+          package-manager: npm  # <--- AQUÍ INDICAS QUE USE NPM OBLIGATORIAMENTE
 
   publicar:
     needs: construir
