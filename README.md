@@ -46,5 +46,6 @@ Feel free to check [our documentation](https://docs.astro.build) or jump into ou
 # frontend-programacion-iv-crear-repo-Bitacora_Espacial_Archivo_NASA
 || LISEHD || 
  HENRY ||
+ PRUEBA ASTRO HENRY
 Buscador de imágenes astronómicas de la NASA con carga optimizada de medios y truncado de metadatos en frontend
 >>>>>>> 3afeda71e4b34a8c81dae54416ba40b15230a547
