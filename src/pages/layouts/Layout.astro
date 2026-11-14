@@ -1,0 +1,50 @@
+---
+// Layout.astro
+// Encabezado y pie de página comunes a todas las páginas.
+// Lo que cambia de una página a otra entra por <slot />.
+
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import "../styles/variables.css";
+import "../styles/global.css";
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+  activo?: string;
+  ancho?: "normal" | "ancho";
+}
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "") + "/";
+const {
+  titulo = "Bitácora Espacial",
+  descripcion = "Explora imágenes astronómicas de los centros de la NASA.",
+  activo,
+  ancho = "normal",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#1c1c1c" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+  </head>
+
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <Header activo={activo} />
+
+    <main id="contenido" class:list={["principal", { "principal-ancho": ancho === "ancho" }]}>
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

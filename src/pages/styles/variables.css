@@ -1,0 +1,70 @@
+/* sistema de Diseño Bitakora Espacial*/
+:root {
+/* Color marca*/
+  --color-marca: #3d4bff;
+  --color-marca-oscuro: #2c38d6;
+  --color-marca-suave: #1b1e3d;
+  --color-marca-borde: #2f3680;
+  --color-enlace: #5b9cf5;
+
+/* neutro calidos*/
+  --color-texto: #ffffff;
+  --color-texto-suave: #b5b5b5;
+  --color-texto-tenue: #8e8e8e;
+  --color-fondo: #232323;
+  --color-lienzo: #1c1c1c;
+  --color-superficie: #3a3a3a;
+  --color-superficie-hover: #454545;
+  --color-media: #000000;
+  --color-borde: #3a3a3a;
+  --color-borde-fuerte: #4a4a4a;
+
+/*color estados*/
+
+--color-error: #ff5c5c;
+--color-error-suave: #3d1c1c;
+--color-exito: #2ecc71;
+--color-exito-suave: #163824;
+
+
+/*tipografia*/
+
+--fuente: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+--fuente-texto: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+--texto-xxl: 2.75rem;
+--texto-xl: 2rem;
+--texto-l: 1.5rem;
+--texto-M: 1.125rem;
+--texto-base: 1rem;
+--texto-s: 0.875rem;
+--texto-xs: 0.75rem;
+
+/* espaciado */
+
+--esp-1: 0.25rem;
+--esp-2: 0.5rem;
+--esp-3: 1rem;
+--esp-4: 1.5rem;
+--esp-5: 2rem;
+--esp-6: 3rem;
+--esp-7: 4.5rem;
+
+/* forma */
+
+--radio-s: 8px;
+--radio-m: 14px;
+--radio-l: 22px;
+--radio-pildora: 999px;
+
+/* elevacion */
+--sombra-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+--sombra-2: 0 6px 20px -8px rgba(0, 0, 0, 0.6);
+--sombra-3: 0 18px 40px -16px rgba(0, 0, 0, 0.8);
+
+/* medidas */
+
+--ancho-maximo: 1180px;
+--ancho-lectura: 68ch;
+--transicion: 160ms ease;
+
+}
