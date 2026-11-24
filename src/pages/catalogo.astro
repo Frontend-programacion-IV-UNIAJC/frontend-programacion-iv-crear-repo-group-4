@@ -1,0 +1,82 @@
+---
+// catalogo.astro
+import Layout from "../layouts/Layout.astro";
+import Filtros from "../components/catalogo/Filtros.astro";
+import BarraDeBusqueda from "../components/catalogo/BarraDeBusqueda.astro";
+import CardGrid from "../components/catalogo/CardGrid.astro";
+import Paginacion from "../components/catalogo/Paginacion.astro";
+import Estado from "../components/ui/Estado.astro";
+import { imagenesOrdenadas, centros } from "../data/datos-de-prueba.js";
+
+// Paginación de prueba: hoy solo se ve la primera página.
+const porPagina = 3;
+const total = Math.ceil(imagenesOrdenadas.length / porPagina);
+const imagenesPagina = imagenesOrdenadas.slice(0, porPagina);
+---
+
+<Layout
+  titulo="Catálogo — Bitácora Espacial"
+  descripcion="Catálogo de imágenes astronómicas de la NASA con fecha, centro y etiquetas visibles."
+  activo="catalogo"
+  ancho="ancho"
+>
+  <div class="contenedor catalogo">
+    <p class="rotulo">Catálogo</p>
+    <h1>Explora el archivo</h1>
+    <p class="entrada">
+      Busca por palabra clave o filtra por centro de la NASA. Cada tarjeta carga
+      una miniatura ligera; la imagen grande solo se abre en el detalle.
+    </p>
+
+    <div class="catalogo__barra">
+      <BarraDeBusqueda />
+      <Filtros centros={centros} />
+    </div>
+
+    {imagenesOrdenadas.length === 0 ? (
+      <Estado tipo="vacio" />
+    ) : (
+      <>
+        <p class="catalogo__conteo" role="status">
+          <strong>{imagenesOrdenadas.length}</strong>
+          {imagenesOrdenadas.length === 1 ? " imagen encontrada" : " imágenes encontradas"}
+        </p>
+        <CardGrid imagenes={imagenesPagina} />
+        <Paginacion actual={1} total={total} />
+      </>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .entrada {
+    max-width: var(--ancho-lectura);
+    color: var(--color-texto-suave);
+  }
+
+  /* Celular: buscador y filtro apilados */
+  .catalogo__barra {
+    display: grid;
+    gap: var(--esp-3);
+    margin-top: var(--esp-5);
+  }
+
+  /* Escritorio: buscador ancho y filtro al lado, como en el boceto */
+  @media (min-width: 700px) {
+    .catalogo__barra {
+      grid-template-columns: 1fr 280px;
+      align-items: start;
+    }
+  }
+
+  .catalogo__conteo {
+    margin: var(--esp-4) 0 var(--esp-3);
+    font-size: var(--texto-s);
+    color: var(--color-texto-suave);
+  }
+
+  .catalogo__conteo strong {
+    color: var(--color-texto);
+  }
+</style>
+ 
