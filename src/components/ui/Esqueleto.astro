@@ -1,40 +1,107 @@
+---
+// Esqueleto.astro
+// Estado "cargando": bloques con la forma de la tarjeta que va a llegar,
+// no una rueda girando sobre una pantalla en blanco.
+interface Props {
+  cantidad?: number;
+}
+
+const { cantidad = 3 } = Astro.props;
+const bloques = Array.from({ length: cantidad });
+---
+
+<ul class="esqueletos" aria-busy="true" aria-label="Cargando imágenes">
+  {bloques.map(() => (
+    <li class="esqueleto">
+      <div class="esqueleto__imagen"></div>
+      <div class="esqueleto__cuerpo">
+        <div class="esqueleto__linea esqueleto__linea--titulo"></div>
+        <div class="esqueleto__linea esqueleto__linea--corta"></div>
+        <div class="esqueleto__etiquetas">
+          <span class="esqueleto__pildora"></span>
+          <span class="esqueleto__pildora"></span>
+        </div>
+        <div class="esqueleto__linea"></div>
+        <div class="esqueleto__linea"></div>
+        <div class="esqueleto__linea esqueleto__linea--corta"></div>
+      </div>
+    </li>
+  ))}
+</ul>
+
 <style>
-  .estado {
+  .esqueletos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: var(--esp-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .esqueleto {
+    min-width: 0;
+    background: var(--color-fondo);
+    border: 1px solid var(--color-borde-fuerte);
+    border-radius: var(--radio-m);
+    overflow: hidden;
+  }
+
+  .esqueleto__imagen,
+  .esqueleto__linea,
+  .esqueleto__pildora {
+    background: var(--color-superficie);
+    animation: pulso 1.4s ease-in-out infinite;
+  }
+
+  .esqueleto__imagen {
+    aspect-ratio: 4 / 3;
+  }
+
+  .esqueleto__cuerpo {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: var(--esp-6) var(--esp-4);
-    background: var(--color-fondo);
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-m);
+    gap: var(--esp-2);
+    padding: var(--esp-3);
   }
 
-  .estado__icono {
-    display: grid;
-    place-items: center;
-    width: 52px;
-    height: 52px;
-    margin-bottom: var(--esp-3);
+  .esqueleto__linea {
+    height: 10px;
     border-radius: var(--radio-pildora);
-    background: var(--color-superficie);
-    color: var(--color-texto-suave);
   }
 
-  .estado--error .estado__icono {
-    background: var(--color-error-suave);
-    color: var(--color-error);
+  .esqueleto__linea--titulo {
+    width: 70%;
+    height: 14px;
   }
 
-  .estado__titulo {
-    margin: 0 0 var(--esp-2);
+  .esqueleto__linea--corta {
+    width: 40%;
   }
 
-  .estado__mensaje {
-    max-width: 46ch;
-    margin: 0 0 var(--esp-4);
-    color: var(--color-texto-suave);
+  .esqueleto__etiquetas {
+    display: flex;
+    gap: var(--esp-2);
+  }
+
+  .esqueleto__pildora {
+    width: 64px;
+    height: 24px;
+    border-radius: var(--radio-pildora);
+  }
+
+  @keyframes pulso {
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  /* El global.css acorta la duración, pero una animación infinita de 0.01 ms parpadea */
+  @media (prefers-reduced-motion: reduce) {
+    .esqueleto__imagen,
+    .esqueleto__linea,
+    .esqueleto__pildora {
+      animation: none;
+    }
   }
 </style>
-
- 

@@ -1,0 +1,72 @@
+---
+// Filtros.astro
+// Desplegable para filtrar por centro de la NASA.
+// Hoy solo se ve. Empieza a filtrar cuando agreguemos JavaScript.
+interface Props {
+  centros?: string[];
+}
+
+const { centros = [] } = Astro.props;
+---
+
+<div class="filtros">
+  <label class="solo-lectores" for="filtro-centro">Filtrar por centro de la NASA</label>
+  <div class="filtros__envoltura">
+    <select class="filtros__campo" id="filtro-centro" name="centro">
+      <option value="">Centro: Todos</option>
+      {centros.map((centro) => (
+        <option value={centro}>Centro: {centro}</option>
+      ))}
+    </select>
+    <svg
+      class="filtros__flecha"
+      viewBox="0 0 24 24"
+      width="18"
+      height="18"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  </div>
+</div>
+
+<style>
+  .filtros {
+    min-width: 0;
+  }
+
+  .filtros__envoltura {
+    position: relative;
+  }
+
+  .filtros__campo {
+    appearance: none;
+    width: 100%;
+    min-height: 48px; /* misma altura que la barra de búsqueda */
+    padding: 0 calc(var(--esp-3) + 28px) 0 var(--esp-3);
+    font: inherit;
+    color: var(--color-texto);
+    background:
+      border: 1px solid var(--color-borde-fuerte);
+    border-radius: var(--radio-s);
+    cursor: pointer;
+  }
+
+  .filtros__campo:focus-visible {
+    border-color: var(--color-enlace);
+  }
+
+  .filtros__flecha {
+    position: absolute;
+    right: var(--esp-3);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-texto-suave);
+    pointer-events: none;
+  }
+</style>
