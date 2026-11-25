@@ -86,9 +86,5 @@ export async function obtenerImagenes({
     imagenes,
     total: datos?.collection?.metadata?.total_hits ?? imagenes.length,
   };
-<<<<<<< HEAD
+
 }
-=======
-}
- 
->>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
