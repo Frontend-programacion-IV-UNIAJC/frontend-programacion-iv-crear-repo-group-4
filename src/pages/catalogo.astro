@@ -8,6 +8,7 @@ import Paginacion from "../components/catalogo/Paginacion.astro";
 import Estado from "../components/ui/Estado.astro";
 import { imagenesOrdenadas, centros } from "../data/datos-de-prueba.js";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { obtenerImagenes } from "../services/api.js";
 
 
@@ -16,12 +17,17 @@ console.log(imagenes[0]);
 const porPagina = 3;
 const total = Math.ceil(imagenesOrdenadas.length / porPagina);
 =======
+=======
+import { obtenerImagenes } from "../services/api.js";
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
 
-// Paginación de prueba: hoy solo se ve la primera página.
 const porPagina = 3;
 const total = Math.ceil(imagenesOrdenadas.length / porPagina);
+<<<<<<< HEAD
 const imagenesPagina = imagenesOrdenadas.slice(0, porPagina);
 >>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
+=======
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
 ---
 
 <Layout
@@ -52,12 +58,18 @@ const imagenesPagina = imagenesOrdenadas.slice(0, porPagina);
           {imagenesOrdenadas.length === 1 ? " imagen encontrada" : " imágenes encontradas"}
         </p>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div class="catalogo__lista" data-por-pagina={porPagina}>
           <CardGrid imagenes={imagenesOrdenadas} />
         </div>
 =======
         <CardGrid imagenes={imagenesPagina} />
 >>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
+=======
+        <div class="catalogo__lista" data-por-pagina={porPagina}>
+          <CardGrid imagenes={imagenesOrdenadas} />
+        </div>
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
         <Paginacion actual={1} total={total} />
       </>
     )}
@@ -65,6 +77,9 @@ const imagenesPagina = imagenesOrdenadas.slice(0, porPagina);
 </Layout>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
 <script>
   const lista = document.querySelector<HTMLElement>(".catalogo__lista");
   const nav = document.querySelector<HTMLElement>(".paginacion");
@@ -121,8 +136,11 @@ const imagenesPagina = imagenesOrdenadas.slice(0, porPagina);
   }
 </script>
 
+<<<<<<< HEAD
 =======
 >>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
+=======
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
 <style>
   .entrada {
     max-width: var(--ancho-lectura);
@@ -154,8 +172,12 @@ const imagenesPagina = imagenesOrdenadas.slice(0, porPagina);
     color: var(--color-texto);
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
 </style>
 =======
 </style>
  
 >>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
+=======
+</style>
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412

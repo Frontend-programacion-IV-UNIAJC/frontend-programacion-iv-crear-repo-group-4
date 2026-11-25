@@ -18,10 +18,14 @@
 //   - Tarantula no trae centro -> "No especificado"
 //   - Helix no trae keywords   -> se oculta el contenedor de etiquetas
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
  
 >>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
+=======
+
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
 export const imagenes = [
   {
     id: "prueba-0001",
@@ -32,10 +36,14 @@ export const imagenes = [
     centro: "JPL",
     keywords: ["Nebula", "Hubble", "Gas"],
 <<<<<<< HEAD
+<<<<<<< HEAD
     miniatura: "img/muestras/carina.jpg",
 =======
     miniatura: "img/muestras/carina.svg",
 >>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
+=======
+    miniatura: "img/muestras/carina.jpg",
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
   },
   {
     id: "prueba-0002",
@@ -46,10 +54,14 @@ export const imagenes = [
     centro: "GSFC",
     keywords: ["Deepspace", "Gas"],
 <<<<<<< HEAD
+<<<<<<< HEAD
     miniatura: "img/muestras/orion.jpg", 
 =======
     miniatura: null, // sin miniatura: prueba de la imagen de reserva
 >>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
+=======
+    miniatura: "img/muestras/orion.jpg", 
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
   },
   {
     id: "prueba-0003",
@@ -60,10 +72,14 @@ export const imagenes = [
     centro: null, // sin centro: prueba de "No especificado"
     keywords: ["Stars", "Dust"],
 <<<<<<< HEAD
+<<<<<<< HEAD
     miniatura: "img/muestras/tarantula.jpg",
 =======
     miniatura: "img/muestras/tarantula.svg",
 >>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
+=======
+    miniatura: "img/muestras/tarantula.jpg",
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
   },
   {
     id: "prueba-0004",
@@ -74,10 +90,14 @@ export const imagenes = [
     centro: "MSFC",
     keywords: [], // sin keywords: prueba de ocultar las etiquetas
 <<<<<<< HEAD
+<<<<<<< HEAD
     miniatura: "img/muestras/helix.jpg",
 =======
     miniatura: "img/muestras/helix.svg",
 >>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
+=======
+    miniatura: "img/muestras/helix.jpg",
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
   },
   {
     id: "prueba-0005",
@@ -88,10 +108,14 @@ export const imagenes = [
     centro: "MSFC",
     keywords: ["Supernova", "Chandra"],
 <<<<<<< HEAD
+<<<<<<< HEAD
     miniatura: "img/muestras/cangrejo.jpg",
 =======
     miniatura: "img/muestras/cangrejo.svg",
 >>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
+=======
+    miniatura: "img/muestras/cangrejo.jpg",
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
   },
   {
     id: "prueba-0006",
@@ -101,6 +125,7 @@ export const imagenes = [
     fecha: "2025-12-05T00:00:00Z",
     centro: "JPL",
     keywords: ["Nebula", "Webb", "Infrared"],
+<<<<<<< HEAD
 <<<<<<< HEAD
     miniatura: "img/muestras/aguila.jpg",
   },
@@ -112,16 +137,26 @@ export const imagenes = [
 ];
  
 >>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
+=======
+    miniatura: "img/muestras/aguila.jpg",
+  },
+];
+
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
 // Orden por defecto: cronológico descendente (briefing 4.3).
 // [...imagenes] copia el arreglo para no alterar el original.
 export const imagenesOrdenadas = [...imagenes].sort(
   (a, b) => new Date(b.fecha) - new Date(a.fecha)
 );
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
  
 >>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
+=======
+
+>>>>>>> c86d4b36c4dae1145794bbc832297014c0531412
 // Lista para el filtro de centros, calculada a partir de los datos.
 // new Set() quita los repetidos; el filtro con typeof descarta los null
 // de una forma que TypeScript entiende (así la lista es string[], sin null).
