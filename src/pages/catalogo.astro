@@ -7,6 +7,7 @@ import CardGrid from "../components/catalogo/CardGrid.astro";
 import Paginacion from "../components/catalogo/Paginacion.astro";
 import Estado from "../components/ui/Estado.astro";
 import { imagenesOrdenadas, centros } from "../data/datos-de-prueba.js";
+<<<<<<< HEAD
 import { obtenerImagenes } from "../services/api.js";
 
 
@@ -14,6 +15,13 @@ const { imagenes } = await obtenerImagenes({ porPagina: 12 });
 console.log(imagenes[0]);
 const porPagina = 3;
 const total = Math.ceil(imagenesOrdenadas.length / porPagina);
+=======
+
+// Paginación de prueba: hoy solo se ve la primera página.
+const porPagina = 3;
+const total = Math.ceil(imagenesOrdenadas.length / porPagina);
+const imagenesPagina = imagenesOrdenadas.slice(0, porPagina);
+>>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
 ---
 
 <Layout
@@ -43,15 +51,20 @@ const total = Math.ceil(imagenesOrdenadas.length / porPagina);
           <strong>{imagenesOrdenadas.length}</strong>
           {imagenesOrdenadas.length === 1 ? " imagen encontrada" : " imágenes encontradas"}
         </p>
+<<<<<<< HEAD
         <div class="catalogo__lista" data-por-pagina={porPagina}>
           <CardGrid imagenes={imagenesOrdenadas} />
         </div>
+=======
+        <CardGrid imagenes={imagenesPagina} />
+>>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
         <Paginacion actual={1} total={total} />
       </>
     )}
   </div>
 </Layout>
 
+<<<<<<< HEAD
 <script>
   const lista = document.querySelector<HTMLElement>(".catalogo__lista");
   const nav = document.querySelector<HTMLElement>(".paginacion");
@@ -108,6 +121,8 @@ const total = Math.ceil(imagenesOrdenadas.length / porPagina);
   }
 </script>
 
+=======
+>>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
 <style>
   .entrada {
     max-width: var(--ancho-lectura);
@@ -138,4 +153,9 @@ const total = Math.ceil(imagenesOrdenadas.length / porPagina);
   .catalogo__conteo strong {
     color: var(--color-texto);
   }
+<<<<<<< HEAD
 </style>
+=======
+</style>
+ 
+>>>>>>> 65dcfecfa08f3da0fd8f4178561dc7ac290b9bd5
