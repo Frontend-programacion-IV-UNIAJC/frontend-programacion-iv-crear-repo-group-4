@@ -1,0 +1,118 @@
+---
+// estados.astro
+// Referencia de interfaz: los cuatro estados de una pantalla con datos.
+import Layout from "../layouts/Layout.astro";
+import CardGrid from "../components/catalogo/CardGrid.astro";
+import Esqueleto from "../components/ui/Esqueleto.astro";
+import Estado from "../components/ui/Estado.astro";
+import Boton from "../components/ui/Boton.astro";
+import { imagenesOrdenadas } from "../data/datos-de-prueba.js";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "") + "/";
+---
+
+<Layout
+  titulo="Los cuatro estados — Bitácora Espacial"
+  descripcion="Referencia de interfaz: cargando, con datos, vacío y error."
+  ancho="ancho"
+>
+  <div class="contenedor">
+    <p class="rotulo">Referencia de interfaz</p>
+    <h1>Los cuatro estados</h1>
+    <p class="entrada">
+      Toda pantalla que muestra datos existe en cuatro versiones. Diseñar solo
+      la segunda es diseñar la cuarta parte de la pantalla.
+    </p>
+
+    <section class="bloque">
+      <h2>1. Cargando</h2>
+      <p class="bloque__ayuda">Bloques con la forma de la tarjeta que va a llegar.</p>
+      <Esqueleto cantidad={3} />
+    </section>
+
+    <section class="bloque">
+      <h2>2. Con datos</h2>
+      <p class="bloque__ayuda">El caso que todo el mundo diseña.</p>
+      <CardGrid imagenes={imagenesOrdenadas.slice(0, 3)} />
+    </section>
+
+    <section class="bloque">
+      <h2>3. Vacío</h2>
+      <p class="bloque__ayuda">Dice qué pasó, por qué, y ofrece una salida.</p>
+      <Estado
+        tipo="vacio"
+        titulo="No encontramos imágenes con ese filtro"
+        mensaje='Prueba con otra palabra clave o elige "Centro: Todos".'
+      >
+        <Boton href={`${base}catalogo`}>Ver todo el catálogo</Boton>
+      </Estado>
+    </section>
+
+    <section class="bloque">
+      <h2>4. Error</h2>
+      <p class="bloque__ayuda">En español y sin códigos. El usuario no tiene la culpa de que la red falle.</p>
+      <Estado
+        tipo="error"
+        titulo="No pudimos cargar la galería"
+        mensaje="Puede ser tu conexión o el servicio de la NASA. Vuelve a intentarlo en unos segundos."
+      >
+        <Boton onclick="location.reload()">Reintentar</Boton>
+      </Estado>
+    </section>
+
+    <aside class="aviso">
+      <p class="aviso__titulo">Aviso técnico para cuando lleguen los datos reales</p>
+      <p>
+        Cuando la API no encuentra resultados responde bien, pero con la lista
+        vacía. Ese caso es el estado <em>Vacío</em>, no el de <em>Error</em>.
+        El estado <em>Error</em> es para cuando la petición falla (sin
+        conexión, servicio caído). Confundirlos es el fallo más común.
+      </p>
+    </aside>
+  </div>
+</Layout>
+
+<style>
+  .entrada {
+    max-width: var(--ancho-lectura);
+    color: var(--color-texto-suave);
+  }
+
+  .bloque {
+    padding-top: var(--esp-5);
+    margin-top: var(--esp-5);
+    border-top: 1px solid var(--color-borde-fuerte);
+  }
+
+  .bloque h2 {
+    margin-bottom: var(--esp-1);
+  }
+
+  .bloque__ayuda {
+    margin: 0 0 var(--esp-4);
+    font-size: var(--texto-s);
+    color: var(--color-texto-suave);
+  }
+
+  .aviso {
+    margin-top: var(--esp-6);
+    padding: var(--esp-4);
+    background: var(--color-marca-suave);
+    border: 1px solid var(--color-marca-borde);
+    border-radius: var(--radio-m);
+  }
+
+  .aviso p {
+    margin: 0;
+  }
+
+  .aviso p + p {
+    margin-top: var(--esp-1);
+  }
+
+  .aviso__titulo {
+    font-weight: 700;
+    color: var(--color-enlace);
+  }
+</style>
+ 
