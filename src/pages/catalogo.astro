@@ -6,20 +6,21 @@ import BarraDeBusqueda from "../components/catalogo/BarraDeBusqueda.astro";
 import CardGrid from "../components/catalogo/CardGrid.astro";
 import Paginacion from "../components/catalogo/Paginacion.astro";
 import Estado from "../components/ui/Estado.astro";
-import { imagenesOrdenadas, centros } from "../data/datos-de-prueba.js";
 import { obtenerImagenes } from "../services/api.js";
 
-// Prueba de la API: imprime en la TERMINAL (no en F12) el primer resultado.
-// Bórrala cuando confirmes que los datos llegan bien.
-try {
-  const { imagenes } = await obtenerImagenes({ porPagina: 12 });
-  console.log(imagenes[0]);
-} catch (error) {
-  console.error("La API no respondió:", error);
-}
-
 const porPagina = 3;
-const total = Math.ceil(imagenesOrdenadas.length / porPagina);
+
+// Si la API falla, obtenerImagenes devuelve los datos de prueba (deRespaldo = true)
+const { imagenes, deRespaldo } = await obtenerImagenes({ porPagina: 12 });
+const total = Math.ceil(imagenes.length / porPagina);
+
+const centros: string[] = [
+  ...new Set(
+    imagenes
+      .map((i) => i.centro)
+      .filter((c): c is string => typeof c === "string")
+  ),
+];
 ---
 
 <Layout
@@ -41,16 +42,21 @@ const total = Math.ceil(imagenesOrdenadas.length / porPagina);
       <Filtros centros={centros} />
     </div>
 
-    {imagenesOrdenadas.length === 0 ? (
+    {imagenes.length === 0 ? (
       <Estado tipo="vacio" />
     ) : (
       <>
+        {deRespaldo && (
+          <p class="catalogo__aviso" role="status">
+            No pudimos conectar con la NASA. Mostramos imágenes de ejemplo.
+          </p>
+        )}
         <p class="catalogo__conteo" role="status">
-          <strong>{imagenesOrdenadas.length}</strong>
-          {imagenesOrdenadas.length === 1 ? " imagen encontrada" : " imágenes encontradas"}
+          <strong>{imagenes.length}</strong>
+          {imagenes.length === 1 ? " imagen encontrada" : " imágenes encontradas"}
         </p>
         <div class="catalogo__lista" data-por-pagina={porPagina}>
-          <CardGrid imagenes={imagenesOrdenadas} />
+          <CardGrid imagenes={imagenes} />
         </div>
         <Paginacion actual={1} total={total} />
       </>
@@ -93,7 +99,7 @@ const total = Math.ceil(imagenesOrdenadas.length / porPagina);
       if (anterior) anterior.disabled = actual === 1;
       if (siguiente) siguiente.disabled = actual === total;
 
-      // Texto "2 de 2" que se ve en móvil
+      // Texto "2 de 4" que se ve en móvil
       const estado = nav.querySelector("[data-estado-actual]");
       if (estado) estado.textContent = String(actual);
     }
@@ -133,6 +139,16 @@ const total = Math.ceil(imagenesOrdenadas.length / porPagina);
       grid-template-columns: 1fr 280px;
       align-items: start;
     }
+  }
+
+  .catalogo__aviso {
+    margin: var(--esp-4) 0 0;
+    padding: var(--esp-3);
+    background: var(--color-marca-suave);
+    border: 1px solid var(--color-marca-borde);
+    border-radius: var(--radio-s);
+    color: var(--color-texto);
+    font-size: var(--texto-s);
   }
 
   .catalogo__conteo {
