@@ -97,4 +97,15 @@ export const centros = [
       .map((i) => i.centro)
       .filter((c) => typeof c === "string")
   ),
+
+    {
+    id: "prueba-0007",
+    titulo: "",
+    descripcion: null,
+    fecha: null,
+    centro: null,
+    keywords: [],
+    miniatura: null,
+  },
+
 ];

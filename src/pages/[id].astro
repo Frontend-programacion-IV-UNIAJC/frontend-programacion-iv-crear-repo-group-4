@@ -1,0 +1,222 @@
+---
+// [id].astro
+// Una página por imagen: /<id>
+import type { InferGetStaticPropsType } from "astro";
+import Layout from "../layouts/Layout.astro";
+import Etiqueta from "../components/ui/Etiqueta.astro";
+import { obtenerImagenes, nombreCentro } from "../services/api.js";
+
+// Se ejecuta al construir el sitio: genera una página por cada imagen.
+// Debe pedir LO MISMO que catalogo.astro, o habrá tarjetas sin página.
+export async function getStaticPaths() {
+  const { imagenes } = await obtenerImagenes({ porPagina: 12 });
+  return imagenes.map((imagen) => ({
+    params: { id: imagen.id },
+    props: { imagen },
+  }));
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { imagen } = Astro.props;
+const { titulo, descripcion, fecha, centro, keywords, miniatura } = imagen;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "") + "/";
+
+// ---- Valores por defecto: nunca "undefined" ni imagen rota (briefing 4.4) ----
+const tituloFinal = (typeof titulo === "string" && titulo.trim()) || "Sin título";
+const sinMiniatura = !miniatura;
+const centroTexto = centro ? `${centro} · ${nombreCentro(centro)}` : "No especificado";
+const fechaValida = typeof fecha === "string" && fecha.length >= 10;
+const fechaCorta = fechaValida ? fecha.slice(0, 10) : "Fecha no disponible";
+const texto = descripcion || "Sin descripción disponible.";
+const etiquetas = Array.isArray(keywords) ? keywords : [];
+const resumenMeta = texto.length > 150 ? `${texto.slice(0, 147)}...` : texto;
+
+// ---- Imagen: grande (estimada) -> miniatura -> imagen de reserva ----
+const fallback = `${base}img/fallback.svg`;
+const miniaturaSrc = sinMiniatura
+  ? fallback
+  : miniatura.startsWith("http") ? miniatura : `${base}${miniatura}`;
+const grande = miniaturaSrc.includes("~thumb.")
+  ? miniaturaSrc.replace("~thumb.", "~large.")
+  : miniaturaSrc;
+const alErrorImagen =
+  grande !== miniaturaSrc
+    ? `this.onerror=function(){this.onerror=null;this.src='${fallback}'};this.src='${miniaturaSrc}'`
+    : `this.onerror=null;this.src='${fallback}'`;
+---
+
+<Layout
+  titulo={`${tituloFinal} — Bitácora Espacial`}
+  descripcion={resumenMeta}
+  activo="catalogo"
+  ancho="ancho"
+>
+  <div class="contenedor detalle">
+    <a class="detalle__volver" href={`${base}catalogo`}>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="m15 18-6-6 6-6" />
+      </svg>
+      Volver al catálogo
+    </a>
+
+    <article class="detalle__interior">
+      <div class="detalle__columna">
+        <div class="detalle__medio">
+          <img
+            class="detalle__imagen"
+            src={grande}
+            alt={sinMiniatura ? "Imagen no disponible" : `Imagen astronómica: ${tituloFinal}`}
+            width="800"
+            height="600"
+            fetchpriority="high"
+            decoding="async"
+            onerror={alErrorImagen}
+          />
+        </div>
+        {sinMiniatura && (
+          <p class="detalle__nota">Imagen no disponible para este elemento.</p>
+        )}
+        {!sinMiniatura && grande !== miniaturaSrc && (
+          <p class="detalle__nota">
+            Imagen ampliada con tamaño estimado. Si no está disponible, se muestra la vista previa.
+          </p>
+        )}
+      </div>
+
+      <div class="detalle__info">
+        <h1 class="detalle__titulo">{tituloFinal}</h1>
+
+        <dl class="detalle__datos">
+          <div>
+            <dt>Fecha</dt>
+            <dd>
+              {fechaValida
+                ? <time datetime={fecha}>{fechaCorta}</time>
+                : fechaCorta}
+            </dd>
+          </div>
+          <div>
+            <dt>Centro</dt>
+            <dd>{centroTexto}</dd>
+          </div>
+        </dl>
+
+        {etiquetas.length > 0 && (
+          <ul class="detalle__etiquetas" aria-label="Palabras clave">
+            {etiquetas.map((k) => (
+              <li><Etiqueta>{k}</Etiqueta></li>
+            ))}
+          </ul>
+        )}
+
+        <p class="detalle__descripcion">{texto}</p>
+      </div>
+    </article>
+  </div>
+</Layout>
+
+<style>
+  .detalle__volver {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--esp-2);
+    min-height: 44px;
+    margin-bottom: var(--esp-3);
+    color: var(--color-enlace);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .detalle__volver:hover {
+    text-decoration: underline;
+  }
+
+  /* Celular: imagen arriba, información debajo */
+  .detalle__interior {
+    display: grid;
+    gap: var(--esp-5);
+  }
+
+  /* Escritorio: imagen a la izquierda, información a la derecha (como el boceto) */
+  @media (min-width: 900px) {
+    .detalle__interior {
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--esp-6);
+      align-items: start;
+    }
+  }
+
+  .detalle__columna {
+    min-width: 0;
+  }
+
+  .detalle__medio {
+    background: var(--color-media);
+    border-radius: var(--radio-m);
+    overflow: hidden;
+  }
+
+  .detalle__imagen {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    aspect-ratio: 4 / 3;
+    object-fit: contain; /* se ve la imagen completa, sin recortes */
+  }
+
+  .detalle__nota {
+    margin: var(--esp-2) 0 0;
+    font-size: var(--texto-xs);
+    color: var(--color-texto-tenue);
+  }
+
+  .detalle__info {
+    min-width: 0;
+  }
+
+  .detalle__titulo {
+    overflow-wrap: anywhere;
+  }
+
+  .detalle__datos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--esp-4);
+    margin: 0 0 var(--esp-3);
+  }
+
+  .detalle__datos dt {
+    font-size: var(--texto-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-texto-tenue);
+  }
+
+  .detalle__datos dd {
+    margin: 0;
+    color: var(--color-texto-suave);
+  }
+
+  .detalle__etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--esp-2);
+    list-style: none;
+    margin: 0 0 var(--esp-4);
+    padding: 0;
+  }
+
+  .detalle__etiquetas li {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .detalle__descripcion {
+    max-width: var(--ancho-lectura);
+    white-space: pre-line; /* respeta los saltos de línea de la NASA */
+    overflow-wrap: anywhere;
+    color: var(--color-texto-suave);
+  }
+</style>

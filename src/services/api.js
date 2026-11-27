@@ -47,11 +47,14 @@ function limpiarTexto(texto) {
 }
 
 /**
- * Traduce un item de la API al formato de datos-de-prueba.js
- * (id, titulo, descripcion, fecha, centro, keywords, miniatura).
- * @param {any} item
- * @returns {Imagen}
+ * Solo los ids "seguros" para una URL tienen página de detalle.
+ * @param {unknown} id
+ * @returns {boolean}
  */
+function esIdSeguro(id) {
+  return typeof id === "string" && /^[A-Za-z0-9._-]+$/.test(id);
+}
+
 export function adaptarImagen(item) {
   const dato = item?.data?.[0] ?? {};
   const enlace = item?.links?.find((/** @type {any} */ l) => l.rel === "preview") ?? item?.links?.[0];
@@ -106,7 +109,7 @@ export async function obtenerImagenes({
 
     const imagenes = items
       .map(adaptarImagen)
-      .filter((/** @type {Imagen} */ imagen) => imagen.id)
+      .filter((/** @type {Imagen} */ imagen) => esIdSeguro(imagen.id))
       .sort(
         (/** @type {Imagen} */ a, /** @type {Imagen} */ b) =>
           new Date(b.fecha ?? 0).getTime() - new Date(a.fecha ?? 0).getTime()

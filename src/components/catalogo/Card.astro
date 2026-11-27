@@ -2,7 +2,6 @@
 // Card.astro
 // Resumen de una imagen: la recibe por props, no va a buscar datos.
 import Etiqueta from "../ui/Etiqueta.astro";
-import Boton from "../ui/Boton.astro";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "") + "/";
 const { imagen } = Astro.props;
@@ -37,7 +36,9 @@ const hayKeywords = Array.isArray(keywords) && keywords.length > 0;
   </div>
 
   <div class="tarjeta__cuerpo">
-    <h3 class="tarjeta__titulo">{titulo}</h3>
+    <h3 class="tarjeta__titulo">
+      <a class="tarjeta__enlace" href={`${base}${id}`}>{titulo}</a>
+    </h3>
 
     <p class="tarjeta__meta">
       <time datetime={fecha}>{fechaCorta}</time> · {centroTexto}
@@ -53,16 +54,14 @@ const hayKeywords = Array.isArray(keywords) && keywords.length > 0;
 
     <p class="tarjeta__descripcion">{resumen}</p>
 
-    <div class="tarjeta__accion">
-      <Boton href={`${base}detalle?id=${encodeURIComponent(id)}`} variante="fantasma">
-        Leer más<span class="solo-lectores">: {titulo}</span>
-      </Boton>
-    </div>
+    <!-- Solo visual: el enlace del título ya cubre toda la tarjeta -->
+    <span class="tarjeta__leer" aria-hidden="true">Leer más</span>
   </div>
 </article>
 
 <style>
   .tarjeta {
+    position: relative; /* el ::after del enlace se mide desde aquí */
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -70,6 +69,11 @@ const hayKeywords = Array.isArray(keywords) && keywords.length > 0;
     border: 1px solid var(--color-borde-fuerte);
     border-radius: var(--radio-m);
     overflow: hidden;
+    transition: border-color var(--transicion);
+  }
+
+  .tarjeta:hover {
+    border-color: var(--color-enlace);
   }
 
   .tarjeta__medio {
@@ -109,6 +113,28 @@ const hayKeywords = Array.isArray(keywords) && keywords.length > 0;
     overflow-wrap: anywhere;
   }
 
+  .tarjeta__enlace {
+    color: var(--color-texto);
+    text-decoration: none;
+  }
+
+  /* Toda la tarjeta es clicable: el ::after del enlace la cubre completa */
+  .tarjeta__enlace::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .tarjeta__enlace:focus-visible {
+    outline: none;
+  }
+
+  .tarjeta:has(.tarjeta__enlace:focus-visible) {
+    outline: 3px solid var(--color-enlace);
+    outline-offset: 2px;
+  }
+
   .tarjeta__meta {
     margin: 0;
     font-size: var(--texto-s);
@@ -142,13 +168,21 @@ const hayKeywords = Array.isArray(keywords) && keywords.length > 0;
     color: var(--color-texto-suave);
   }
 
-  /* margin-top: auto alinea los botones al fondo en todas las tarjetas */
-  .tarjeta__accion {
+  /* margin-top: auto lo baja al fondo, igual en todas las tarjetas */
+  .tarjeta__leer {
     margin-top: auto;
-    padding-top: var(--esp-2);
+    display: grid;
+    place-items: center;
+    min-height: 44px;
+    border-radius: var(--radio-s);
+    background: var(--color-superficie);
+    color: var(--color-texto);
+    font-size: var(--texto-s);
+    font-weight: 600;
+    transition: background var(--transicion);
   }
 
-  .tarjeta__accion :global(.boton) {
-    width: 100%;
+  .tarjeta:hover .tarjeta__leer {
+    background: var(--color-superficie-hover);
   }
 </style>
