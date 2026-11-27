@@ -1,0 +1,45 @@
+---
+// CardGrid.astro
+// Rejilla de tarjetas: recibe la lista por props, no va a buscar datos.
+import Card from "./Card.astro";
+
+interface Imagen {
+  id: string;
+  titulo: string;
+  descripcion?: string | null;
+  fecha?: string | null;
+  centro?: string | null;
+  keywords?: string[];
+  miniatura?: string | null;
+}
+
+interface Props {
+  imagenes: Imagen[];
+}
+
+const { imagenes } = Astro.props;
+---
+
+<ul class="rejilla">
+  {imagenes.map((imagen) => (
+    <li>
+      <Card imagen={imagen} />
+    </li>
+  ))}
+</ul>
+
+<style>
+  .rejilla {
+    display: grid;
+    /* min(100%, 260px) evita que una tarjeta se salga de la pantalla a 320 px */
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: var(--esp-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .rejilla > li {
+    min-width: 0; /* un hijo de Grid no se encoge sin esto */
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+// Etiqueta.astro
+// Píldora de metadato: palabra clave (neutro) o centro de la NASA (marca).
+const { tono = "neutro" } = Astro.props;
+---
+
+<span class={`etiqueta etiqueta--${tono}`}><slot /></span>
+
+<style>
+  .etiqueta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--esp-1);
+    max-width: 100%;
+    font-size: var(--texto-s);
+    line-height: 1;
+    padding: 0.4rem 0.7rem;
+    border-radius: var(--radio-pildora);
+    border: 1px solid var(--color-borde-fuerte);
+    background: var(--color-superficie);
+    color: var(--color-texto);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .etiqueta--marca {
+    background: var(--color-marca-suave);
+    border-color: var(--color-marca-borde);
+    color: var(--color-enlace);
+    font-weight: 600;
+  }
+</style>

@@ -1,0 +1,163 @@
+---
+// catalogo.astro
+import Layout from "../layouts/Layout.astro";
+import Filtros from "../components/catalogo/Filtros.astro";
+import BarraDeBusqueda from "../components/catalogo/BarraDeBusqueda.astro";
+import CardGrid from "../components/catalogo/CardGrid.astro";
+import Paginacion from "../components/catalogo/Paginacion.astro";
+import Estado from "../components/ui/Estado.astro";
+import { obtenerImagenes } from "../services/api.js";
+
+const porPagina = 3;
+
+// Si la API falla, obtenerImagenes devuelve los datos de prueba (deRespaldo = true)
+const { imagenes, deRespaldo } = await obtenerImagenes({ porPagina: 12 });
+const total = Math.ceil(imagenes.length / porPagina);
+
+const centros: string[] = [
+  ...new Set(
+    imagenes
+      .map((i) => i.centro)
+      .filter((c): c is string => typeof c === "string")
+  ),
+];
+---
+
+<Layout
+  titulo="Catálogo — Bitácora Espacial"
+  descripcion="Catálogo de imágenes astronómicas de la NASA con fecha, centro y etiquetas visibles."
+  activo="catalogo"
+  ancho="ancho"
+>
+  <div class="contenedor catalogo">
+    <p class="rotulo">Catálogo</p>
+    <h1>Explora el archivo</h1>
+    <p class="entrada">
+      Busca por palabra clave o filtra por centro de la NASA. Cada tarjeta carga
+      una miniatura ligera; la imagen grande solo se abre en el detalle.
+    </p>
+
+    <div class="catalogo__barra">
+      <BarraDeBusqueda />
+      <Filtros centros={centros} />
+    </div>
+
+    {imagenes.length === 0 ? (
+      <Estado tipo="vacio" />
+    ) : (
+      <>
+        {deRespaldo && (
+          <p class="catalogo__aviso" role="status">
+            No pudimos conectar con la NASA. Mostramos imágenes de ejemplo.
+          </p>
+        )}
+        <p class="catalogo__conteo" role="status">
+          <strong>{imagenes.length}</strong>
+          {imagenes.length === 1 ? " imagen encontrada" : " imágenes encontradas"}
+        </p>
+        <div class="catalogo__lista" data-por-pagina={porPagina}>
+          <CardGrid imagenes={imagenes} />
+        </div>
+        <Paginacion actual={1} total={total} />
+      </>
+    )}
+  </div>
+</Layout>
+
+<script>
+  const lista = document.querySelector<HTMLElement>(".catalogo__lista");
+  const nav = document.querySelector<HTMLElement>(".paginacion");
+
+  if (lista) {
+    const porPagina = Number(lista.dataset.porPagina) || 3;
+    const items = Array.from(lista.querySelectorAll<HTMLElement>(".rejilla > li"));
+    const total = Math.max(1, Math.ceil(items.length / porPagina));
+    let actual = 1;
+
+    function mostrar(pagina: number) {
+      actual = Math.min(Math.max(pagina, 1), total);
+
+      // Muestra solo las tarjetas de la página actual
+      items.forEach((li, i) => {
+        li.hidden = Math.ceil((i + 1) / porPagina) !== actual;
+      });
+
+      if (!nav) return;
+
+      // Marca el número activo
+      nav.querySelectorAll<HTMLButtonElement>("[data-pagina]").forEach((boton) => {
+        if (Number(boton.dataset.pagina) === actual) {
+          boton.setAttribute("aria-current", "page");
+        } else {
+          boton.removeAttribute("aria-current");
+        }
+      });
+
+      // Activa o desactiva Anterior y Siguiente
+      const anterior = nav.querySelector<HTMLButtonElement>('[data-accion="anterior"]');
+      const siguiente = nav.querySelector<HTMLButtonElement>('[data-accion="siguiente"]');
+      if (anterior) anterior.disabled = actual === 1;
+      if (siguiente) siguiente.disabled = actual === total;
+
+      // Texto "2 de 4" que se ve en móvil
+      const estado = nav.querySelector("[data-estado-actual]");
+      if (estado) estado.textContent = String(actual);
+    }
+
+    nav?.addEventListener("click", (evento) => {
+      const boton = (evento.target as HTMLElement).closest<HTMLButtonElement>("button");
+      if (!boton || boton.disabled) return;
+
+      if (boton.dataset.accion === "anterior") mostrar(actual - 1);
+      else if (boton.dataset.accion === "siguiente") mostrar(actual + 1);
+      else if (boton.dataset.pagina) mostrar(Number(boton.dataset.pagina));
+
+      // Vuelve al inicio de los resultados
+      document.querySelector(".catalogo__conteo")?.scrollIntoView({ block: "start" });
+    });
+
+    mostrar(1);
+  }
+</script>
+
+<style>
+  .entrada {
+    max-width: var(--ancho-lectura);
+    color: var(--color-texto-suave);
+  }
+
+  /* Celular: buscador y filtro apilados */
+  .catalogo__barra {
+    display: grid;
+    gap: var(--esp-3);
+    margin-top: var(--esp-5);
+  }
+
+  /* Escritorio: buscador ancho y filtro al lado, como en el boceto */
+  @media (min-width: 700px) {
+    .catalogo__barra {
+      grid-template-columns: 1fr 280px;
+      align-items: start;
+    }
+  }
+
+  .catalogo__aviso {
+    margin: var(--esp-4) 0 0;
+    padding: var(--esp-3);
+    background: var(--color-marca-suave);
+    border: 1px solid var(--color-marca-borde);
+    border-radius: var(--radio-s);
+    color: var(--color-texto);
+    font-size: var(--texto-s);
+  }
+
+  .catalogo__conteo {
+    margin: var(--esp-4) 0 var(--esp-3);
+    font-size: var(--texto-s);
+    color: var(--color-texto-suave);
+  }
+
+  .catalogo__conteo strong {
+    color: var(--color-texto);
+  }
+</style>

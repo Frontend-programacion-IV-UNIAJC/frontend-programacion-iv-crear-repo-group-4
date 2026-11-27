@@ -1,0 +1,167 @@
+---
+// Header.astro
+// Marca y navegación principal
+const base = import.meta.env.BASE_URL.replace(/\/$/, "") + "/";
+const { activo } = Astro.props;
+
+const enlaces = [
+  { nombre: "Inicio", ruta: "", clave: "inicio" },
+  { nombre: "Catálogo", ruta: "catalogo", clave: "catalogo" },
+  { nombre: "Favoritos", ruta: "favoritos", clave: "favoritos" },
+  { nombre: "Contacto", ruta: "contacto", clave: "contacto" },
+  { nombre: "Acerca de", ruta: "acerca-de", clave: "acerca" },
+];
+---
+
+<header class="encabezado">
+  <div class="contenedor encabezado__interior">
+    <a class="marca" href={base}>
+      <span class="marca__simbolo" aria-hidden="true">
+        <!-- Ícono "rocket" de Lucide; si se ve raro, cópialo de lucide.dev -->
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+          <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+          <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+          <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+        </svg>
+      </span>
+      <span class="marca__texto">
+        <span class="marca__nombre">Bitácora Espacial</span>
+        <span class="marca__lema">Archivo NASA</span>
+      </span>
+    </a>
+
+    <nav class="navegacion" aria-label="Navegación principal">
+      <ul class="navegacion__lista">
+        {enlaces.map((e) => (
+          <li>
+            <a
+              href={`${base}${e.ruta}`}
+              class:list={["navegacion__enlace", { "es-activo": activo === e.clave }]}
+              aria-current={activo === e.clave ? "page" : undefined}
+            >
+              {e.nombre}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .encabezado {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(35, 35, 35, 0.92); /* = --color-fondo con transparencia */
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-borde-fuerte);
+  }
+
+  .encabezado__interior {
+    display: flex;
+    flex-direction: column;
+    gap: var(--esp-2);
+    padding-top: var(--esp-3);
+    padding-bottom: var(--esp-2);
+  }
+
+  .marca {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--esp-2);
+    text-decoration: none;
+    color: var(--color-texto);
+    width: fit-content;
+  }
+
+  .marca__simbolo {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radio-s);
+    background: var(--color-marca);
+    color: #ffffff;
+    flex-shrink: 0;
+  }
+
+  .marca__texto {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+
+  .marca__nombre {
+    font-family: var(--fuente);
+    font-size: var(--texto-l);
+    font-weight: 600;
+    color: var(--color-texto);
+    letter-spacing: -0.01em;
+  }
+
+  .marca__lema {
+    font-size: var(--texto-xs);
+    color: var(--color-texto-suave);
+  }
+
+  .navegacion {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .navegacion__lista {
+    display: flex;
+    gap: var(--esp-1);
+    list-style: none;
+    margin: 0;
+    padding: 0 0 var(--esp-1);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .navegacion__lista::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navegacion__enlace {
+    display: inline-block;
+    padding: 0.5rem 0.85rem;
+    border-radius: var(--radio-pildora);
+    font-size: var(--texto-s);
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--color-texto-suave);
+    white-space: nowrap;
+    transition: background var(--transicion), color var(--transicion);
+  }
+
+  .navegacion__enlace:hover {
+    background: var(--color-superficie);
+    color: var(--color-texto);
+  }
+
+  .navegacion__enlace:focus-visible {
+    outline-offset: -3px; /* evita que el overflow recorte el foco */
+  }
+
+  .navegacion__enlace.es-activo {
+    background: var(--color-marca-suave);
+    color: var(--color-enlace);
+  }
+
+  @media (min-width: 860px) {
+    .encabezado__interior {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--esp-3);
+      padding-bottom: var(--esp-3);
+    }
+
+    .navegacion__lista {
+      padding-bottom: 0;
+    }
+  }
+</style>
